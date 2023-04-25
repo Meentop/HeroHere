@@ -61,7 +61,7 @@ public abstract class Weapon : MonoBehaviour
         enemyInRange = false;
     }
 
-    Transform curTarget = null, nextTarget = null;
+    protected Transform curTarget = null, nextTarget = null;
 
     public void SetRotation(Transform target)
     {
