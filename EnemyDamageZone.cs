@@ -2,17 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyDamageZone : MonoBehaviour
+public class EnemyDamageZone : DamageZone
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void OnTriggerEnter(Collider other)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (other.gameObject.GetComponent<Player>())
+        {
+            Player player = other.gameObject.GetComponent<Player>();
+            player.GetDamage(damage, transform);
+        }
     }
 }

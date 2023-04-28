@@ -12,6 +12,8 @@ public abstract class Weapon : MonoBehaviour
 
     [SerializeField] Transform attackPoint;
 
+    [SerializeField] PlayerDamageZone damageZone;
+
     Animator anim;
 
     private void Start()
@@ -88,5 +90,10 @@ public abstract class Weapon : MonoBehaviour
             anim.SetBool("EnemyInRange", false);
             isSleep = true;
         }
+    }
+
+    public void ClearDamagedEnemies()
+    {
+        damageZone.ClearDamagedEnemies();
     }
 }

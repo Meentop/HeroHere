@@ -4,15 +4,15 @@ using UnityEngine;
 
 public abstract class MeleeEnemy : Enemy
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void FixedUpdate()
     {
-        
+        if(!sleep)
+            MoveTowardPlayer();
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        
+        if (!sleep)
+            Rotation();
     }
 }

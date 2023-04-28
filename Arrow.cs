@@ -10,11 +10,14 @@ public class Arrow : MonoBehaviour
 
     private void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, target.position, maxDistanceDelta);
-        transform.rotation = Quaternion.LookRotation((transform.position - target.position).normalized);
-        if(Vector3.Distance(transform.position, target.position) < 0.001f)
-        {
+        if (target == null)
             Destroy(gameObject);
+        else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target.position, maxDistanceDelta);
+            transform.rotation = Quaternion.LookRotation((transform.position - target.position).normalized);
+            if (Vector3.Distance(transform.position, target.position) < 0.001f)
+                Destroy(gameObject);
         }
     }
 }

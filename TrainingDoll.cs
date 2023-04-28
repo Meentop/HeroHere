@@ -6,7 +6,13 @@ public class TrainingDoll : Enemy
 {
     [SerializeField] float maxHealthTime = 3, healthTimer = 3;
 
-    private void FixedUpdate()
+    protected override void Start()
+    {
+        base.Start();
+        sleep = false;
+    }
+
+    protected override void FixedUpdate()
     {
         if(curHp < maxHp && healthTimer >= 0)
         {
@@ -26,7 +32,10 @@ public class TrainingDoll : Enemy
 
     public override void GetDamage(float damage)
     {
-        base.GetDamage(damage);
+        curHp -= damage;
+        if (curHp <= 0)
+            curHp = 0;
+        UpdateHpBar();
         healthTimer = maxHealthTime;
     }
 }
