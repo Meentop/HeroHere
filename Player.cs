@@ -6,27 +6,27 @@ using System.Linq;
 
 public class Player : MonoBehaviour
 {
+    [Header("General")]
     [SerializeField] Joystick joystick;
-
-    [SerializeField] float speed, rotationSpeed, stunDuration, invulnerableDuration;
-
-    [SerializeField] Transform weaponPivot;
-
-    [SerializeField] Weapon weapon;
-
     [SerializeField] Animator anim;
-
     [SerializeField] Text fps;
+    [SerializeField] GameObject deathScreen;
+    Rigidbody rb;
 
+    [Header("Movement")]
+    [SerializeField] float speed;
+    [SerializeField] float rotationSpeed, stunDuration, invulnerableDuration;
+
+    [Header("Weapon")]
+    [SerializeField] Transform weaponPivot;
+    Weapon weapon = null;
     [SerializeField] DrawWeaponRadius drawWeaponRadius;
 
+    [Header("Health")]
     [SerializeField] float maxHp = 100;
     float curHp = 0;
-    bool isMove = true, invulnerable = false;
-
+    bool isMove = true, invulnerable = false, isDead = false;
     [SerializeField] RectTransform hpBar;
-
-    Rigidbody rb;
 
     private void Start()
     {
@@ -38,17 +38,20 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (isMove)
+        if (!isDead)
         {
-            Rotation();
-            SetMoveAnim();
+            if (isMove)
+            {
+                Rotation();
+                SetMoveAnim();
+            }
+            EnemyDetection();
         }
-        EnemyDetection();
     }
 
     private void FixedUpdate()
     {
-        if(isMove)
+        if(isMove && !isDead)
             Move();
     }
 
@@ -122,21 +125,27 @@ public class Player : MonoBehaviour
 
 
 
-    public void GetDamage(float damage, Transform enemy)
+    public void GetDamage(float damage)
     {
-        if (!invulnerable)
+        if (!invulnerable && !isDead)
         {
             curHp -= damage;
             if (curHp <= 0)
-            {
-                curHp = 0;
-                Destroy(gameObject);
-            }
+                Death();
             UpdateHpBar();
-            StartCoroutine(PushBack(enemy));
+            StartCoroutine(GetHit());
             anim.SetTrigger("GetHit");
-            print("get hit");
         }
+    }
+
+    void Death()
+    {
+        curHp = 0;
+        UpdateHpBar();
+        anim.SetBool("Dead", true);
+        isDead = true;
+        deathScreen.SetActive(true);
+        weapon.EnemyIsOutRange();
     }
 
     void UpdateHpBar()
@@ -144,7 +153,7 @@ public class Player : MonoBehaviour
         hpBar.localScale = new Vector3(curHp / maxHp, 1, 1);
     }
 
-    IEnumerator PushBack(Transform enemy)
+    IEnumerator GetHit()
     {
         isMove = false;
         invulnerable = true;

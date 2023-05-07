@@ -9,10 +9,12 @@ public abstract class Enemy : MonoBehaviour
 
     [SerializeField] RectTransform hpBar;
 
-    Player player;
+    protected Player player;
     Rigidbody rb;
 
-    [SerializeField] float moveSpeed, rotationSpeed, pushBackStrength, pushBackDuration;
+    [SerializeField] protected float moveSpeed, rotationSpeed, pushBackStrength, pushBackDuration;
+
+    [SerializeField] protected BattleZone battleZone;
 
     protected bool isMove = true, sleep = true;
 
@@ -43,11 +45,12 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    protected void Rotation()
+    protected virtual void Rotation(Transform rotObj)
     {
-        Vector3 direction = (player.transform.position - transform.position).normalized;
+        Vector3 direction = (player.transform.position - rotObj.position).normalized;
         Quaternion endRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Lerp(transform.rotation, endRotation, rotationSpeed);
+        Quaternion rot = Quaternion.Lerp(rotObj.rotation, endRotation, rotationSpeed);
+        rotObj.rotation = Quaternion.Euler(new Vector3(rotObj.rotation.eulerAngles.x, rot.eulerAngles.y, rotObj.rotation.eulerAngles.z));
     }
 
     public virtual void GetDamage(float damage)
@@ -56,13 +59,14 @@ public abstract class Enemy : MonoBehaviour
         if (curHp <= 0)
         {
             curHp = 0;
+            battleZone.RemoveEnemy(this);
             Destroy(gameObject);
         }
         UpdateHpBar();
         StartCoroutine(PushBack());
     }
 
-    IEnumerator PushBack()
+    protected virtual IEnumerator PushBack()
     {
         isMove = false;
         rb.velocity = Vector3.zero;

@@ -8,18 +8,33 @@ public class BattleZone : MonoBehaviour
 
     [SerializeField] List<Enemy> enemies = new List<Enemy>();
     [SerializeField] CameraMove cameraMove;
-    [SerializeField] GameObject door;
+    [SerializeField] GameObject inDoor, outDoor;
+
+    bool active = false;
 
     private void OnTriggerEnter(Collider collider)
     {
-        if(collider.gameObject.GetComponent<Player>())
+        if(collider.gameObject.GetComponent<Player>() && !active)
         {
             foreach (var enemy in enemies)
             {
                 enemy.WakeUp();
                 cameraMove.SetTarget(cameraPoint);
-                door.SetActive(true);
+                inDoor.SetActive(true);
+                active = true;
             }
         }
+    }
+
+    public void RemoveEnemy(Enemy enemy)
+    {
+        enemies.Remove(enemy);
+        CheckRoomClear();
+    }
+
+    void CheckRoomClear()
+    {
+        if (enemies.Count == 0)
+            outDoor.SetActive(false);
     }
 }

@@ -9,7 +9,7 @@ public class EnemyDamageZone : DamageZone
         if (other.gameObject.GetComponent<Player>())
         {
             Player player = other.gameObject.GetComponent<Player>();
-            player.GetDamage(damage, transform);
+            player.GetDamage(damage);
         }
     }
 }

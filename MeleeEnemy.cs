@@ -13,6 +13,6 @@ public abstract class MeleeEnemy : Enemy
     protected override void Update()
     {
         if (!sleep)
-            Rotation();
+            Rotation(transform);
     }
 }
