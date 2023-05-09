@@ -15,12 +15,15 @@ public abstract class Projectile : MonoBehaviour
             Destroy(gameObject);
         else
         {
-            Movement();
-            Rotation();
-            if (Vector3.Distance(transform.position, target.position) < 0.001f)
+            if (!Main.pause)
             {
-                MakeDamage();
-                Destroy(gameObject);
+                Movement();
+                Rotation();
+                if (Vector3.Distance(transform.position, target.position) < 0.001f)
+                {
+                    MakeDamage();
+                    Destroy(gameObject);
+                }
             }
         }
     }

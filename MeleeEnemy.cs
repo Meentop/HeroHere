@@ -6,13 +6,15 @@ public abstract class MeleeEnemy : Enemy
 {
     protected override void FixedUpdate()
     {
-        if(!sleep)
+        if(!sleep && !Main.pause)
             MoveTowardPlayer();
     }
 
     protected override void Update()
     {
-        if (!sleep)
+        if (!sleep && !Main.pause)
             Rotation(transform);
     }
+
+    
 }

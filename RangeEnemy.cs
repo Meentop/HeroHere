@@ -13,7 +13,7 @@ public abstract class RangeEnemy : Enemy
 
     protected override void Update()
     {
-        if (!sleep)
+        if (!sleep && !Main.pause)
         {
             Rotation(rotObj);
             Reload();

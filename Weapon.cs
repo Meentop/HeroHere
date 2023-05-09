@@ -96,4 +96,9 @@ public abstract class Weapon : MonoBehaviour
     {
         damageZone.ClearDamagedEnemies();
     }
+
+    public void SetAnimationEnabled(bool value)
+    {
+        gameObject.GetComponent<Animator>().enabled = value;
+    }
 }

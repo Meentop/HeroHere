@@ -10,8 +10,11 @@ public class Cannonball : Projectile
             Destroy(gameObject);
         else
         {
-            Movement();
-            Rotation();
+            if (!Main.pause)
+            {
+                Movement();
+                Rotation();
+            }
         }
     }
 

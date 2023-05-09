@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (!isDead)
+        if (!isDead && !Main.pause)
         {
             if (isMove)
             {
@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(isMove && !isDead)
+        if(isMove && !isDead && !Main.pause)
             Move();
     }
 
@@ -162,5 +162,22 @@ public class Player : MonoBehaviour
         isMove = true;
         yield return new WaitForSeconds(invulnerableDuration - stunDuration);
         invulnerable = false;
+    }
+
+
+    public void SetWeaponAnimEnabled(bool value)
+    {
+        if (weapon != null)
+            weapon.SetAnimationEnabled(value);
+    }
+
+    public void SetPlayerAnimEnabled(bool value)
+    {
+        anim.enabled = value;
+    }
+
+    public void StopMovement()
+    {
+        rb.velocity = Vector3.zero;
     }
 }

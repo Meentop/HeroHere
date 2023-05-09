@@ -10,7 +10,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] RectTransform hpBar;
 
     protected Player player;
-    Rigidbody rb;
+    protected Rigidbody rb;
 
     [SerializeField] protected float moveSpeed, rotationSpeed, pushBackStrength, pushBackDuration;
 
@@ -88,5 +88,10 @@ public abstract class Enemy : MonoBehaviour
     public bool IsSleep()
     {
         return sleep;
+    }
+
+    public void StopMovement()
+    {
+        rb.velocity = Vector3.zero;
     }
 }

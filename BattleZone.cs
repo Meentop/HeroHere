@@ -23,6 +23,7 @@ public class BattleZone : MonoBehaviour
                 inDoor.SetActive(true);
                 active = true;
             }
+            Main.Instance.curBattleZone = this;
         }
     }
 
@@ -36,5 +37,13 @@ public class BattleZone : MonoBehaviour
     {
         if (enemies.Count == 0)
             outDoor.SetActive(false);
+    }
+
+    public void StopAllEnemies()
+    {
+        foreach (var enemy in enemies)
+        {
+            enemy.StopMovement();
+        }
     }
 }
