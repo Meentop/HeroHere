@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public abstract class Enemy : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected Player player;
     protected Rigidbody rb;
+    protected NavMeshAgent agent;
 
     [SerializeField] protected float moveSpeed, rotationSpeed, pushBackStrength, pushBackDuration;
 
@@ -23,7 +25,7 @@ public abstract class Enemy : MonoBehaviour
         curHp = maxHp;
         UpdateHpBar();
         player = FindObjectOfType<Player>();
-        rb = GetComponent<Rigidbody>();
+        agent = GetComponent<NavMeshAgent>();
     }
 
     protected virtual void Update()
@@ -40,8 +42,7 @@ public abstract class Enemy : MonoBehaviour
     {
         if (isMove)
         {
-            Vector3 direction = (player.transform.position - transform.position).normalized;
-            rb.velocity = new Vector3(direction.x, 0, direction.z) * moveSpeed;
+            agent.SetDestination(player.transform.position);
         }
     }
 
@@ -68,10 +69,16 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual IEnumerator PushBack()
     {
+        float timer = pushBackDuration;
         isMove = false;
-        rb.velocity = Vector3.zero;
-        rb.AddForce((transform.position - player.transform.position).normalized * pushBackStrength, ForceMode.Impulse);
-        yield return new WaitForSeconds(pushBackDuration);
+        agent.enabled = false; 
+        while(timer > 0)
+        {
+            transform.Translate((transform.position - player.transform.position).normalized * pushBackStrength * Time.deltaTime, Space.World);
+            timer -= Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        agent.enabled = true;
         isMove = true;
     }
 
@@ -90,8 +97,9 @@ public abstract class Enemy : MonoBehaviour
         return sleep;
     }
 
-    public void StopMovement()
+    public void StopMovement(bool value)
     {
-        rb.velocity = Vector3.zero;
+        if (agent != null)
+            agent.enabled = !value;
     }
 }

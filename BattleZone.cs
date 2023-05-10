@@ -39,11 +39,11 @@ public class BattleZone : MonoBehaviour
             outDoor.SetActive(false);
     }
 
-    public void StopAllEnemies()
+    public void StopAllEnemies(bool value)
     {
         foreach (var enemy in enemies)
         {
-            enemy.StopMovement();
+            enemy.StopMovement(value);
         }
     }
 }

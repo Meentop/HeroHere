@@ -32,7 +32,7 @@ public class Main : MonoBehaviour
         player.SetWeaponAnimEnabled(!value);
         player.SetPlayerAnimEnabled(!value);
         if (curBattleZone != null)
-            curBattleZone.StopAllEnemies();
+            curBattleZone.StopAllEnemies(value);
         player.StopMovement();
     }
 }
