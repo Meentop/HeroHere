@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
+    public static CameraMove Instance;
+
     [SerializeField] float maxDistanceDelta;
 
     Transform target;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Update()
     {

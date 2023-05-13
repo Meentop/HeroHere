@@ -7,10 +7,15 @@ public class BattleZone : MonoBehaviour
     [SerializeField] Transform cameraPoint;
 
     [SerializeField] List<Enemy> enemies = new List<Enemy>();
-    [SerializeField] CameraMove cameraMove;
+    CameraMove cameraMove;
     [SerializeField] GameObject inDoor, outDoor;
 
     bool active = false;
+
+    private void Start()
+    {
+        cameraMove = CameraMove.Instance;
+    }
 
     private void OnTriggerEnter(Collider collider)
     {
@@ -35,7 +40,7 @@ public class BattleZone : MonoBehaviour
 
     void CheckRoomClear()
     {
-        if (enemies.Count == 0)
+        if (enemies.Count == 0 && outDoor != null)
             outDoor.SetActive(false);
     }
 

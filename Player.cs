@@ -85,18 +85,26 @@ public class Player : MonoBehaviour
         }
     }
 
+    RaycastHit hit;
+
     void EnemyDetection()
     {
-        if(weapon != null)
+        if (weapon != null)
         {
             Collider[] colliders = Physics.OverlapSphere(transform.position, weapon.GetRadius());
             if (colliders.Length > 0)
             {
                 Transform[] enemies = colliders.Where(enemy => enemy.GetComponent<Enemy>() && !enemy.GetComponent<Enemy>().IsSleep()).Select(enemy => enemy.transform).ToArray();
-                if (enemies.Length > 0)
+                List<Transform> enemiesInView = new List<Transform>();
+                foreach (var enemy in enemies)
+                {
+                    if (!Physics.Raycast(transform.position, (enemy.position - transform.position).normalized, out hit, Vector3.Distance(enemy.position, transform.position), LayerMask.GetMask("Solid")))
+                        enemiesInView.Add(enemy);
+                }
+                if (enemiesInView.Count > 0)
                 {
                     weapon.EnemyEnteredInRange();
-                    weapon.SetNextTarget(enemies.OrderBy(enemy => Vector3.Distance(enemy.position, transform.position)).First());
+                    weapon.SetNextTarget(enemiesInView.OrderBy(enemy => Vector3.Distance(enemy.position, transform.position)).First());
                 }
                 else
                     weapon.EnemyIsOutRange();
@@ -135,6 +143,7 @@ public class Player : MonoBehaviour
             UpdateHpBar();
             StartCoroutine(GetHit());
             anim.SetTrigger("GetHit");
+            print("get hit");
         }
     }
 
